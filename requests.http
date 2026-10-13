@@ -1,0 +1,47 @@
+@baseUrl = http://localhost:3000
+@orderId = replace-with-order-id
+
+### Health
+GET {{baseUrl}}/health
+
+### Safe default: dry run
+POST {{baseUrl}}/orders
+Content-Type: application/json
+Idempotency-Key: dry-run-demo-001
+
+{}
+
+### List orders
+GET {{baseUrl}}/orders
+
+### Order status
+GET {{baseUrl}}/orders/{{orderId}}
+
+### Real order: requires explicit confirmation. Do not send until HR asks to test.
+POST {{baseUrl}}/orders
+Content-Type: application/json
+Idempotency-Key: replace-with-a-new-unique-key
+
+{
+  "dryRun": false,
+  "confirm": "PAY 146"
+}
+
+### Send HR OTP only when order status is AWAITING_OTP
+POST {{baseUrl}}/orders/{{orderId}}/otp
+Content-Type: application/json
+
+{
+  "otp": "123456"
+}
+
+### Resolve uncertain post-OTP order after checking Order Center
+POST {{baseUrl}}/orders/{{orderId}}/resolve
+Content-Type: application/json
+
+{
+  "resolution": "not_charged"
+}
+
+### Latest parsed balance and reconciliation status
+GET {{baseUrl}}/balance

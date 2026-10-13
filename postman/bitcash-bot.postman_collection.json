@@ -1,0 +1,16 @@
+{
+  "info": { "name": "BitCash Bot API", "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json" },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:3000" },
+    { "key": "orderId", "value": "replace-with-order-id" }
+  ],
+  "item": [
+    { "name": "Health", "request": { "method": "GET", "url": "{{baseUrl}}/health" } },
+    { "name": "Create dry run", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }, { "key": "Idempotency-Key", "value": "dry-run-demo-001" }], "body": { "mode": "raw", "raw": "{}", "options": { "raw": { "language": "json" } } }, "url": "{{baseUrl}}/orders" } },
+    { "name": "List orders", "request": { "method": "GET", "url": "{{baseUrl}}/orders" } },
+    { "name": "Order status", "request": { "method": "GET", "url": "{{baseUrl}}/orders/{{orderId}}" } },
+    { "name": "Create real order (explicit confirmation)", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }, { "key": "Idempotency-Key", "value": "replace-with-new-key" }], "body": { "mode": "raw", "raw": "{\n  \"dryRun\": false,\n  \"confirm\": \"PAY 146\"\n}", "options": { "raw": { "language": "json" } } }, "url": "{{baseUrl}}/orders" } },
+    { "name": "Submit OTP", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"otp\": \"123456\"\n}", "options": { "raw": { "language": "json" } } }, "url": "{{baseUrl}}/orders/{{orderId}}/otp" } },
+    { "name": "Balance", "request": { "method": "GET", "url": "{{baseUrl}}/balance" } }
+  ]
+}
